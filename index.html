@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon Daycare Tracker</title>
+
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        body {
+            margin: 1rem;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: #272727;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            flex-direction: row;
+            gap: 1rem;
+        }
+
+        .pokemon {
+            background: #f4f4f4;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            flex: 1;
+        }
+
+        input,
+        select,
+        button {
+            border: 0;
+            padding: 0.5rem;
+            margin: 0.5rem;
+        }
+
+        button {
+            margin: 1rem 0.5rem;
+            cursor: pointer;
+            background: #f4f4f4;
+        }
+
+        button:hover {
+            background: #e4e4e4;
+        }
+
+        a {
+            text-decoration: none;
+            color: #272727;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+        }
+    </style>
+
+</head>
+
+<body x-data="{ 
+    capitalize: (str)=> str.charAt(0).toUpperCase() + str.slice(1),
+    pokemon: 
+    JSON.parse(localStorage.getItem('pokemon') ) || 
+    [
+        { id: 1, species: 'ralts', nature: 'modest', ability: 'trace', item: 'destiny knot', gender: 'male', stats: {'HP':true, 'Attack': true, 'Defense': true, 'Special Attack': false, 'Special Defense': false, 'Speed': false} },
+        { id: 2, species: 'ralts', nature: 'timid', ability: 'synchronize', item: 'everstone', gender: 'female', stats: {'HP':true, 'Attack': true, 'Defense': false, 'Special Attack': false, 'Special Defense': true, 'Speed': true} },
+    ],
+    stats: ['HP', 'Attack', 'Defense', 'Special Attack', 'Special Defense', 'Speed']}">
+    <h1>Pokemon Daycare Tracker</h1>
+
+    <div class="container">
+        <template x-for="p in pokemon" :key="p.id">
+            <div class="pokemon bg-gray-100 rounded p-4">
+                <template x-for="key in ['species', 'nature', 'ability', 'item']">
+                    <div>
+                        <label x-bind:for="p.id+key" x-text="capitalize(key) + ':'"></label>
+                        <input x-bind:id="p.id+key" type="text" x-model="p[key]">
+                    </div>
+                </template>
+
+                <label x-bind:for="p.id+'gender'">Gender:</label>
+                <select x-bind:id="p.id+'gender'" x-model="p.gender">
+                    <option value="male">male</option>
+                    <option value="female">female</option>
+                </select>
+
+                <p>IVs:</p>
+                <template x-for="stat in stats">
+                    <div>
+                        <input x-bind:id="p.id+stat" type="checkbox" x-model="p.stats[stat]">
+                        <label x-bind:for="p.id+stat" x-text="stat"></label>
+                    </div>
+                </template>
+            </div>
+        </template>
+
+    </div>
+
+    <button @click="localStorage.removeItem('pokemon'); location.reload();">Reset</button>
+    <button @click="localStorage.setItem('pokemon', JSON.stringify(pokemon))">Save</button>
+    <button @click="
+        if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+        else if (document.exitFullscreen) document.exitFullscreen();
+    ">Fullscreen</button>
+
+    <p>Made by <a href="https://justingolden.me" target="_blank">Justin Golden</a></p>
+</body>
+
+</html>
