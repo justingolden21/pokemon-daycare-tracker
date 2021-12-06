@@ -82,9 +82,9 @@
         <template x-for="p in pokemon" :key="p.id">
             <div class="pokemon bg-gray-100 rounded p-4">
                 <template x-for="key in ['species', 'nature', 'ability', 'item']">
-                    <div>
-                        <label x-bind:for="p.id+key" x-text="capitalize(key) + ':'"></label>
-                        <input x-bind:id="p.id+key" type="text" x-model="p[key]">
+                    <div style="display:flex">
+                        <label style="flex:1" x-bind:for="p.id+key" x-text="capitalize(key) + ':'"></label>
+                        <input style="flex:1" x-bind:id="p.id+key" type="text" x-model="p[key]">
                     </div>
                 </template>
 
